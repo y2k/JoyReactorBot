@@ -4,6 +4,7 @@ import cc.joyreactor.core.Environment
 import cc.joyreactor.core.ImageRef
 import cc.joyreactor.core.Post
 import cc.joyreactor.core.getPosts
+import java.lang.System.getenv
 import java.net.URLEncoder
 
 /**
@@ -11,7 +12,7 @@ import java.net.URLEncoder
  **/
 
 fun main(args: Array<String>) {
-    startBot(args[0]) { message ->
+    startBot(getenv("TOKEN")) { message ->
         match(message) {
             test("posts ([а-яёА-ЯЁ\\w\\d_]+)") { handleGetPosts(it.groupValues[1]) }
             test("posts") { handleGetPosts("") }
@@ -45,7 +46,6 @@ private fun getPosts(tag: String): Pair<List<Response>, Int> =
                 else -> ImageResponse(image.makeRemoteCacheUrl(500, 500), makePostTitle(it))
             }
         }
-//        .filterIsInstance<ImageResponse>()
         .take(3) to 0
 
 private fun makePostTitle(it: Post) = "${url(it)}${getTitle(it)}"

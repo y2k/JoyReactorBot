@@ -12,7 +12,10 @@ buildscript {
     }
 }
 
+apply plugin: 'application'
 apply plugin: 'kotlin'
+
+mainClassName = "cc.joyreactor.MainKt"
 
 repositories {
     mavenCentral()
