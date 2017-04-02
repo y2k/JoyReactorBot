@@ -12,19 +12,32 @@ import java.net.URLEncoder
 
 fun main(args: Array<String>) {
     startBot(args[0]) { message ->
-        when (message) {
-            "/posts" -> getPost() to Markup("Next page", "/posts")
-            else ->
-                "<b>Список команд бота:</b>\n• <b>/posts</b> - список постов из ленты\n\nИсходный код (MIT): https://github.com/y2k/JoyReactorBot"
+        match(message) {
+            test("posts ([а-яёА-ЯЁ\\w\\d_]+)") { handleGetPosts(it.groupValues[1]) }
+            test("posts") { handleGetPosts("") }
+            test {
+                """<b>Список команд бота:</b>
+• <b>posts</b> - список постов из ленты
+• <b>posts [tag]</b> - список постов тега
+
+Исходный код (MIT):
+https://github.com/y2k/JoyReactorBot - бот
+https://github.com/y2k/JoyReactorCore - парсер"""
                     .let(::HtmlResponse)
                     .let(::listOf) to null
+            }
         }
     }
 }
 
-private fun getPost(): List<Response> =
+private fun handleGetPosts(tag: String) =
+    getPosts(tag).let { (posts, next) ->
+        posts to Markup("Next page", "$next")
+    }
+
+private fun getPosts(tag: String): Pair<List<Response>, Int> =
     Environment()
-        .getPosts()
+        .getPosts(tag)
         .map {
             val image = it.image
             when (image) {
@@ -32,12 +45,12 @@ private fun getPost(): List<Response> =
                 else -> ImageResponse(image.makeRemoteCacheUrl(500, 500), makePostTitle(it))
             }
         }
-        .filterIsInstance<ImageResponse>()
-        .take(2)
+//        .filterIsInstance<ImageResponse>()
+        .take(3) to 0
 
-private fun makePostTitle(it: Post) = "${it.url()} - ${getTitle(it)}"
-private fun getTitle(it: Post) = (it.title ?: "")
-private fun Post.url() = "http://joyreactor.cc/post/$id"
+private fun makePostTitle(it: Post) = "${url(it)}${getTitle(it)}"
+private fun url(post: Post) = "http://joyreactor.cc/post/${post.id}"
+private fun getTitle(post: Post) = post.title?.let { "\n$it" } ?: ""
 
 fun ImageRef.makeRemoteCacheUrl(width: Int, height: Int): String =
     URLEncoder

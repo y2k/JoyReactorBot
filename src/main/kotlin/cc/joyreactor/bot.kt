@@ -37,10 +37,11 @@ fun startBot(token: String, onUpdate: (String) -> Pair<List<Response>, Markup?>)
                 }
                 .map { (data, chat, markup) ->
                     val request = when (data) {
-                        is HtmlResponse ->
-                            SendMessage(chat, data.html).parseMode(ParseMode.HTML)
-                        is ImageResponse ->
-                            SendPhoto(chat, data.image).caption(data.title)
+                        is HtmlResponse -> SendMessage(chat, data.html)
+                            .parseMode(ParseMode.HTML)
+                            .disableWebPagePreview(true)
+                        is ImageResponse -> SendPhoto(chat, data.image)
+                            .caption(data.title)
                     }
                     if (markup != null)
                         request.replyMarkup(InlineKeyboardMarkup(
@@ -57,7 +58,6 @@ fun startBot(token: String, onUpdate: (String) -> Pair<List<Response>, Markup?>)
                 }
         } catch (e: Exception) {
             e.printStackTrace()
-            throw e
         }
         UpdatesListener.CONFIRMED_UPDATES_ALL
     }

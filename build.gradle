@@ -22,5 +22,5 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     compile 'com.github.pengrad:java-telegram-bot-api:2.3.1.1'
-    compile 'com.github.y2k:JoyReactorCore:51c1c9f3c6'
+    compile 'com.github.y2k:JoyReactorCore:3dc28c7857'
 }
