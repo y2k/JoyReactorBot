@@ -15,6 +15,7 @@ class Matcher<T : Any> {
     fun default(action: (List<String>) -> T) = templates.add(Regex("(.+)") to action)
 
     fun find(input: String): T = templates
+        .asSequence()
         .mapNotNull { (r, f) -> r.find(input)?.let { f(it.groupValues.drop(1)) } }
         .first()
 }
