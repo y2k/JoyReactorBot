@@ -14,9 +14,10 @@ import java.net.URLEncoder
 fun main(args: Array<String>) {
     startBot(getenv("TOKEN")) { message ->
         match(message) {
-            test("posts ([а-яёА-ЯЁ\\w\\d_]+)") { handleGetPosts(it.groupValues[1]) }
-            test("posts") { handleGetPosts("") }
-            test {
+            case("posts ([а-яёА-ЯЁ\\w\\d_]+) (\\d+)") { (tag, _) -> handleGetPosts(tag) }
+            case("posts ([а-яёА-ЯЁ\\w\\d_ ]+)") { (tag) -> handleGetPosts(tag) }
+            case("posts") { handleGetPosts("") }
+            default {
                 """<b>Список команд бота:</b>
 • <b>posts</b> - список постов из ленты
 • <b>posts [tag]</b> - список постов тега

@@ -9,11 +9,12 @@ fun <T : Any> match(x: String, init: Matcher<T>.() -> Unit): T =
 
 class Matcher<T : Any> {
 
-    private val templates = ArrayList<Pair<Regex, (MatchResult) -> T>>()
+    private val templates = ArrayList<Pair<Regex, (List<String>) -> T>>()
 
-    fun test(regex: String, action: (MatchResult) -> T) = templates.add(Regex(regex) to action)
-    fun test(action: (MatchResult) -> T) = templates.add(Regex("(.+)") to action)
+    fun case(regex: String, action: (List<String>) -> T) = templates.add(Regex(regex) to action)
+    fun default(action: (List<String>) -> T) = templates.add(Regex("(.+)") to action)
+
     fun find(input: String): T = templates
-        .mapNotNull { (r, f) -> r.find(input)?.let { f(it) } }
+        .mapNotNull { (r, f) -> r.find(input)?.let { f(it.groupValues.drop(1)) } }
         .first()
 }
