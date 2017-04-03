@@ -24,7 +24,7 @@ fun startBot(token: String, onUpdate: (String) -> Pair<List<Response>, Markup?>)
                             bot.execute(AnswerCallbackQuery(x.callbackQuery().id()))
                             x.callbackQuery().data() to x.callbackQuery().from().id()
                         }
-                        else -> x.message().text() to x.message().from().id()
+                        else -> x.message().text().toLowerCase() to x.message().from().id()
                     }
 
                     println("text = $text")
