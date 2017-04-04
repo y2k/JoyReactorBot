@@ -17,8 +17,8 @@ fun main(args: Array<String>) {
             case("posts") { handleGetPosts() }
             default {
                 """<b>Список команд бота:</b>
-• <b>posts</b> - список постов из ленты
-• <b>posts [tag]</b> - список постов тега
+<b>posts</b> - список постов из ленты
+<b>posts [tag]</b> - список постов тега
 
 Исходный код (MIT):
 https://github.com/y2k/JoyReactorBot - бот
