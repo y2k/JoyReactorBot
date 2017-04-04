@@ -1,8 +1,18 @@
 package cc.joyreactor
 
+import cc.joyreactor.core.ImageRef
+import java.net.URLEncoder
+
 /**
  * Created by y2k on 02/04/2017.
  **/
+
+fun ImageRef.makeRemoteCacheUrl(width: Int, height: Int): String =
+    URLEncoder
+        .encode(url, "UTF-8")
+        .let { "$BASE_URL&width=$width&height=$height&url=$it" }
+
+private const val BASE_URL = "https://rc.y2k.work/cache/fit?quality=100&bgColor=ffffff"
 
 fun <T : Any> match(x: String, init: Matcher<T>.() -> Unit): T =
     Matcher<T>().apply(init).find(x)

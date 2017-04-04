@@ -2,7 +2,6 @@ package cc.joyreactor
 
 import cc.joyreactor.core.*
 import java.lang.System.getenv
-import java.net.URLEncoder
 
 /**
  * Created by y2k on 31/03/2017.
@@ -56,10 +55,3 @@ private fun getPosts(source: Source, page: Int?): Pair<List<Response>, Int?> {
 private fun makePostTitle(it: Post) = "${url(it)}${getTitle(it)}"
 private fun url(post: Post) = "http://joyreactor.cc/post/${post.id}"
 private fun getTitle(post: Post) = post.title?.let { "\n$it" } ?: ""
-
-private fun ImageRef.makeRemoteCacheUrl(width: Int, height: Int): String =
-    URLEncoder
-        .encode(url, "UTF-8")
-        .let { "$BASE_URL&width=$width&height=$height&url=$it" }
-
-private const val BASE_URL = "https://rc.y2k.work/cache/fit?quality=100&bgColor=ffffff"
